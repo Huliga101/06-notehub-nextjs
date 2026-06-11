@@ -6,7 +6,7 @@ import {
 import { fetchNoteById } from "@/lib/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
-type NoteDetailsPageProps = {
+type NoteDetailsPageProps = {   
   params: Promise<{
     id: string;
   }>;
