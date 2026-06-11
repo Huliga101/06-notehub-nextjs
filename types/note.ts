@@ -11,11 +11,6 @@ export interface Note {
 
 export interface CreateNoteData {
   title: string;
-  content: string;
+  content?: string;
   tag: NoteTag;
-}
-
-export interface FetchNotesResponse {
-  notes: Note[];
-  totalPages: number;
 }

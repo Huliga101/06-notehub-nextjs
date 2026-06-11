@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteNote, fetchNotes } from "@/lib/api";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import Modal from "@/components/Modal/Modal";
@@ -17,8 +17,6 @@ export default function NotesClient() {
   const [inputValue, setInputValue] = useState("");
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -37,13 +35,7 @@ export default function NotesClient() {
         perPage: PER_PAGE,
         search,
       }),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
@@ -79,11 +71,7 @@ export default function NotesClient() {
         </button>
       </div>
 
-      <NoteList
-        notes={notes}
-        onDelete={(id) => deleteMutation.mutate(id)}
-        deletingId={deleteMutation.variables}
-      />
+      <NoteList notes={notes} />
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
